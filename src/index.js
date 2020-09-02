@@ -10,38 +10,43 @@ function Square(props) {
     );
   }
   
-  class Board extends React.Component {
+class Board extends React.Component {
     renderSquare(i) {
       return (
         <Square
-          value={this.props.squares[i]}
-          onClick={() => this.props.onClick(i)}
+            key={i}
+            value={this.props.squares[i]}
+            onClick={() => this.props.onClick(i)}
         />
       );
     }
+
+    renderRow(n){
+        let squares = []
+        for (let i=n; i<n+3; i++){
+            squares.push(this.renderSquare(i))
+        }
+        console.log(squares)
+        return <div className="board-row">{squares}</div>
+    }
+
+    renderRows(){
+        let rows = []
+        for (let i=0; i<9; i += 3){
+            rows.push(this.renderRow(i))
+    }
+        return rows
+}
   
     render() {
       return (
         <div>
-          <div className="board-row">
-            {this.renderSquare(0)}
-            {this.renderSquare(1)}
-            {this.renderSquare(2)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(3)}
-            {this.renderSquare(4)}
-            {this.renderSquare(5)}
-          </div>
-          <div className="board-row">
-            {this.renderSquare(6)}
-            {this.renderSquare(7)}
-            {this.renderSquare(8)}
-          </div>
+          {this.renderRows()}
         </div>
       );
     }
-  }
+    }
+  
   
   class Game extends React.Component {
     constructor(props) {
@@ -87,7 +92,6 @@ function Square(props) {
       this.setState({
         stepNumber: step,
         xIsNext: (step % 2) === 0,
-        stepSelected:step,
 
       });
 
@@ -102,16 +106,10 @@ function Square(props) {
         const desc = move ?
           'Go to move #' + move :
           'Go to game start';
-        if (this.stepSelected){
-            return (
-                <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>testing</button>
-                </li>
-            )
-        }
         return (
           <li key={move}>
-            <button onClick={() => this.jumpTo(move)}>{desc}</button>
+            <button onClick={() => this.jumpTo(move)}>
+                {move===this.state.stepNumber ? <b>{desc}</b> : desc}</button>
           </li>
         );
       });
