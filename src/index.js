@@ -60,6 +60,7 @@ class Board extends React.Component {
           }
         ],
         stepNumber: 0,
+        displayAscending: true,
         xIsNext: true
       };
     }
@@ -113,6 +114,7 @@ class Board extends React.Component {
           </li>
         );
       });
+      const movesReversed = moves.slice(0).reverse()
   
       let status;
       if (winner) {
@@ -131,7 +133,8 @@ class Board extends React.Component {
           </div>
           <div className="game-info">
             <div>{status}</div>
-            <ol>{moves}</ol>
+            <button onClick={()=> this.state.displayAscending ? this.setState({displayAscending: false}) : this.setState({displayAscending: true})}>{this.state.displayAscending ? "descending" : "ascending"}</button>
+            <ul>{this.state.displayAscending ? moves : movesReversed}</ul>
           </div>
         </div>
       );
